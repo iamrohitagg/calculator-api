@@ -18,7 +18,7 @@ app.use(bodyParser.json());
 
 // Check the app is connected or not
 app.get("/", (req, res) => {
-  res.send("I have the calculator app");
+  res.send("Hello world!");
 });
 
 // Check if the number is integer, negative or float number
