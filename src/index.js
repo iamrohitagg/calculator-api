@@ -25,7 +25,7 @@ app.get("/", (req, res) => {
 const checkNumber = (req, res) => {
   let num1 = req.body.num1;
   let num2 = req.body.num2;
-  if (typeof num1 !== "number" || typeof num2 !== "number") {
+  if (typeof num1 === "string" || typeof num2 === "string") {
     res.send(
       JSON.stringify({
         status: "error",
@@ -83,6 +83,15 @@ app.post("/sub", (req, res) => {
 
   if (checkInputLimit(num1, num2, res)) {
     return;
+  }
+
+  if (num1 - num2 < -1000000) {
+    res.send(
+      JSON.stringify({
+        status: "error",
+        message: "Underflow",
+      })
+    );
   }
   res.send(
     JSON.stringify({
