@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const port = 3000;
 
 // Input value limit
-const inputlimit = Math.pow(10, 7);
+const inputlimit = Math.pow(10, 8);
 
 // Parse JSON bodies (as sent by API clients)
 app.use(express.json());
@@ -38,7 +38,7 @@ const checkNumber = (req, res) => {
 const checkInputLimit = (num1, num2, res) => {
   if (num1 > inputlimit || num2 > inputlimit) {
     return res.json({
-      status: "error",
+      status: "failure",
       message: "overflow",
     });
   }
@@ -74,7 +74,7 @@ app.post("/sub", (req, res) => {
   checkNumber(req, res);
   checkInputLimit(num1, num2, res);
 
-  if (num1 - num2 < -1000000) {
+  if (num1 - num2 < -10000000) {
     res.json({
       status: "failure",
       message: "Underflow",
