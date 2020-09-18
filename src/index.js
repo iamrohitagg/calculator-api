@@ -54,7 +54,7 @@ app.post("/add", (req, res) => {
 
   if (num1 + num2 > inputlimit) {
     return res.json({
-      status: "error",
+      status: "failure",
       message: "Overflow",
     });
   }
@@ -76,7 +76,7 @@ app.post("/sub", (req, res) => {
 
   if (num1 - num2 < -1000000) {
     res.json({
-      status: "error",
+      status: "failure",
       message: "Underflow",
     });
   }
