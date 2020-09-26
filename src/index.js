@@ -3,126 +3,108 @@ const app = express();
 const bodyParser = require("body-parser");
 const port = 3000;
 
-// Input value limit
-const inputlimit = Math.pow(10, 6);
-
 // Parse JSON bodies (as sent by API clients)
 app.use(express.json());
 
-app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(bodyParser.json());
+
 // your code goes here
-
-// here
-
-// Check the app is connected or not
 app.get("/", (req, res) => {
-  res.send("Hello world!");
+  return res.json({ message: "Hello world!" });
 });
-
-// Check if the number is integer, negative or float number
-const checkNumber = (req, res) => {
-  let num1 = req.body.num1;
-  let num2 = req.body.num2;
-  if (typeof num1 === "string" || typeof num2 === "string") {
-    return res.json({
-      status: "error",
-      message: "invalid data types",
-    });
-  }
-};
-
-// Check input number limit .
-// Must be less than 10M
-const checkInputLimit = (num1, num2, res) => {
-  if (num1 > inputlimit || num2 > inputlimit) {
-    return res.json({
-      status: "failure",
-      message: "overflow",
-    });
-  }
-};
 
 // API route for adding two numbers
 app.post("/add", (req, res) => {
+  const num = 1000000;
   let num1 = req.body.num1;
   let num2 = req.body.num2;
-
-  checkNumber(req, res);
-  checkInputLimit(num1, num2, res);
-
-  if (num1 + num2 > inputlimit) {
+  let sum = num1 + num2;
+  if (typeof num1 === "string" || typeof num2 === "string") {
+    return res.json({
+      status: "error",
+      message: "Invalid data types",
+    });
+  } else if (num1 >= num || num2 >= num || sum >= num) {
     return res.json({
       status: "failure",
       message: "Overflow",
     });
+  } else {
+    return res.json({
+      status: "success",
+      message: "the sum of given two numbers",
+      sum: sum,
+    });
   }
-
-  return res.json({
-    status: "success",
-    message: "the sum of given two number",
-    sum: num1 + num2,
-  });
 });
 
 // API route for subtracting numbers
 app.post("/sub", (req, res) => {
+  const num = -1000000;
   let num1 = req.body.num1;
   let num2 = req.body.num2;
 
-  checkNumber(req, res);
-  checkInputLimit(num1, num2, res);
-
-  if (num1 - num2 < -1000000) {
-    res.json({
+  if (typeof num1 === "string" || typeof num2 === "string") {
+    return res.json({
+      status: "error",
+      message: "Invalid data types",
+    });
+  } else if (num1 <= num || num2 <= num) {
+    return res.json({
       status: "failure",
       message: "Underflow",
     });
+  } else {
+    let sub = num1 - num2;
+    return res.json({
+      status: "success",
+      message: "the difference of given two numbers",
+      difference: sub,
+    });
   }
-
-  res.json({
-    status: 200,
-    message: "the difference of given two number",
-    sum: num1 - num2,
-  });
 });
 
 // API route to multiply number
 app.post("/multiply", (req, res) => {
+  const num = 1000000;
   let num1 = req.body.num1;
   let num2 = req.body.num2;
-
-  checkNumber(req, res);
-
-  checkInputLimit(num1, num2, res);
-
-  res.json({
-    status: "success",
-    message: "The product of given numbers",
-    sum: num1 * num2,
-  });
+  let mul = num1 * num2;
+  if (typeof num1 === "string" || typeof num2 === "string") {
+    return res.json({
+      status: "error",
+      message: "Invalid data types",
+    });
+  } else if (num1 >= num || num2 >= num || mul >= num) {
+    return res.json({
+      status: "failure",
+      message: "Overflow",
+    });
+  } else {
+    return res.json({
+      status: "success",
+      message: "The product of given numbers",
+      result: mul,
+    });
+  }
 });
 
 // API route to divide number
-app.post("/division", (req, res) => {
+app.post("/divide", (req, res) => {
   let num1 = req.body.num1;
   let num2 = req.body.num2;
-
-  checkNumber(req, res);
-  checkInputLimit(num1, num2, res);
-
   if (num2 === 0) {
     return res.json({
-      status: "error",
       message: "Cannot divide by zero",
     });
   }
-
+  const div = num1 / num2;
   res.json({
     status: "success",
     message: "The division of given numbers",
-    sum: num1 / num2,
+    result: div,
   });
 });
 
